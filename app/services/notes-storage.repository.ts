@@ -8,13 +8,25 @@ interface StoragePayloadV1 {
 const STORAGE_KEY = 'notes:data'
 const SCHEMA_VERSION = 1
 
+// При изменении версии, дописать функцию сюда,
+// ключ - версия, от которой мигрируем.
+const migrations: Record<number, (payload: any) => any> = {}
+
+function migrate(payload: any): StoragePayloadV1 {
+  let current = payload
+  while (current.schemaVersion < SCHEMA_VERSION) {
+    const step = migrations[current.schemaVersion]
+    if (!step) break
+    current = step(current)
+  }
+  return current
+}
+
 export function loadNotes(): Note[] {
   const raw = localStorage.getItem(STORAGE_KEY)
   if (!raw) return []
   try {
-    const parsedStorage = JSON.parse(raw)
-    if (parsedStorage.schemaVersion === SCHEMA_VERSION) return parsedStorage.notes
-    return []
+    return migrate(JSON.parse(raw)).notes
   } catch {
     return []
   }
