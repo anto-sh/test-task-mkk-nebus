@@ -1,27 +1,40 @@
-$color-primary-50: #fffcef;
-$color-primary-500: #ffe49b;
-$color-primary-900: #ffb546;
+$color-primary-50: #5eb2f3;
+$color-primary-500: #62c4eb;
+$color-primary-900: #35dde9;
 
 $color-surface-50: #faf3e5;
+$color-surface-500: #a1a1a1;
 $color-surface-900: #2e2f31;
 
-$spacing-sm: 0.5rem;
-$spacing-md: 1rem;
-$spacing-lg: 1.5rem;
-
-$radius-sm: 0.25rem;
-$radius-md: 0.5rem;
-
-$text-md: 1rem;
-$text-lg: 1.125rem;
-$text-xl: 1.25rem;
-$text-2xl: 1.5rem;
-$text-3xl: 1.875rem;
-$text-4xl: 2.25rem;
-
 :root {
+  --spacing-2xs: 0.125rem;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --text-7xl: 4.5rem;
+
+  // base page styles
   --page-bg-color: #{$color-surface-50};
   --text-main-color: #{$color-surface-900};
+
+  // buttons
+  --btn-border-color: #{$color-surface-500};
 }
 
 @media (prefers-color-scheme: dark) {
