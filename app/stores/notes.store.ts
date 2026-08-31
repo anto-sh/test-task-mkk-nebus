@@ -19,20 +19,10 @@ export const useNotesStore = defineStore('notes', () => {
     unsubscribe?.()
   }
 
-  function createNote(): Note {
-    const note: Note = {
-      id: crypto.randomUUID(),
-      title: '',
-      todos: [],
-    }
-    notes.value.push(note)
-    return note
-  }
-
-  function updateNote(updated: Note) {
-    const index = notes.value.findIndex((n) => n.id === updated.id)
-    if (index === -1) return
-    notes.value[index] = { ...updated }
+  function saveNote(note: Note) {
+    const index = notes.value.findIndex((n) => n.id === note.id)
+    if (index === -1) notes.value.push({ ...note })
+    notes.value[index] = { ...note }
   }
 
   function deleteNote(id: string) {
@@ -43,15 +33,7 @@ export const useNotesStore = defineStore('notes', () => {
     return notes.value.find((n) => n.id === id)
   }
 
-  let saveTimer: NodeJS.Timeout | null = null
-  watch(
-    notes,
-    () => {
-      if (saveTimer) clearTimeout(saveTimer)
-      saveTimer = setTimeout(() => saveNotes(notes.value), 500)
-    },
-    { deep: true },
-  )
+  watch(notes, () => saveNotes(notes.value), { deep: true })
 
-  return { notes, init, dispose, createNote, updateNote, deleteNote, getNoteById }
+  return { notes, init, dispose, saveNote, deleteNote, getNoteById }
 })
