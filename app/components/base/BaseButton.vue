@@ -1,19 +1,19 @@
 <script setup lang="ts">
 interface Props {
-  type?: 'success' | 'danger' | 'info' | 'primary'
+  color?: 'success' | 'danger' | 'info' | 'primary'
   size?: 'small' | 'medium' | 'large'
 }
-const { type = 'primary', size = 'medium' } = defineProps<Props>()
+const { color = 'primary', size = 'medium' } = defineProps<Props>()
 </script>
 
 <template>
-  <button class="button" :class="`button--${type} button--${size}`">
+  <button type="button" class="btn" :class="`btn--${color} btn--${size}`">
     <slot></slot>
   </button>
 </template>
 
 <style scoped lang="scss">
-.button {
+.btn {
   border: var(--btn-border-color);
   border-radius: var(--radius-sm);
 
