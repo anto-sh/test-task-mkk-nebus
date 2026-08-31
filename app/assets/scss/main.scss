@@ -1,6 +1,7 @@
-@use "./_variables";
+@use './_variables';
 
 :root {
   background-color: var(--page-bg-color);
   color: var(--text-main-color);
+  font-family: 'Roboto', sans-serif;
 }
