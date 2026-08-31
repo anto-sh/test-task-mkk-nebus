@@ -1,14 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2025-07-15",
+  compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   ssr: false,
-  css: ["~/assets/scss/main.scss"],
+  css: ['~/assets/scss/main.scss'],
+
   postcss: {
     plugins: {
       autoprefixer: {}, // Автоматически включает Autoprefixer
     },
   },
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -18,4 +20,6 @@ export default defineNuxtConfig({
       },
     },
   },
-});
+
+  modules: ['@nuxt/eslint'],
+})
