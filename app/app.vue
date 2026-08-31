@@ -1,3 +1,10 @@
+<script setup lang="ts">
+const { init } = useNotesStore()
+
+onMounted(init)
+</script>
 <template>
-  <NuxtPage />
+  <div class="container">
+    <NuxtPage />
+  </div>
 </template>
