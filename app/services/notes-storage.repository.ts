@@ -13,7 +13,7 @@ export function loadNotes(): Note[] {
   if (!raw) return []
   try {
     const parsedStorage = JSON.parse(raw)
-    if (parsedStorage.version === SCHEMA_VERSION) return parsedStorage.notes
+    if (parsedStorage.schemaVersion === SCHEMA_VERSION) return parsedStorage.notes
     return []
   } catch {
     return []
