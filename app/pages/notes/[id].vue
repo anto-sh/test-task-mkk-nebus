@@ -115,7 +115,7 @@ function updateTodoItemText(id: string, value: string) {
 }
 
 function updateNoteTitle(value: string) {
-  editingNote.value.title = value
+  editingNote.value.title = value.trim()
 }
 
 provide('addTodoItem', addTodoItem)
@@ -127,6 +127,7 @@ provide('updateNoteTitle', updateNoteTitle)
 /* ────────── global state manipulations functions ───────── */
 async function saveNote() {
   if (editingNote.value.title.trim() == '') editingNote.value.title = 'Без названия'
+  editingNote.value.todos = editingNote.value.todos.filter((t) => t.text)
   notesStore.saveNote(editingNote.value)
   await navigateTo({ path: '/' })
 }
@@ -185,7 +186,9 @@ async function deleteNote() {
   >
     <template #header>Заметка удалена</template>
     <template #default>
-      Заметка была удалена из другой вкладки.
+      Заметка была удалена в другой вкладке.
+      <br />
+      Нажатие кнопки "Сохранить" не возымеет эффекта.
       <br />
       Хотите перейти на главную?
     </template>

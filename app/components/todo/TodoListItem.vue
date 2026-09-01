@@ -17,7 +17,7 @@ const updateTodoItemText = inject<(id: string, value: string) => void>(
 const deleteTodoItem = inject<(id: string) => void>('deleteTodoItem', () => {})
 
 function updateText(event: Event) {
-  updateTodoItemText(item.id, (event.target as HTMLInputElement).value)
+  updateTodoItemText(item.id, (event.target as HTMLInputElement).value.trim())
 }
 
 const todoTextFieldDebouncedCommit = isReadonly
