@@ -19,8 +19,6 @@ export function useHistory(
     past.value.push(patch)
     if (past.value.length > MAX_HISTORY) past.value.shift()
     future.value = []
-    console.log(canRedo.value)
-    console.log(canUndo.value)
   }
 
   function undo() {
