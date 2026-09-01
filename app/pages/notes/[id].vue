@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import NoteForm from '~/components/notes/NoteForm.vue'
 import { useGlobalUndoRedo } from '~/composables/history/useGlobalUndoRedo'
 import { useNoteHistory } from '~/composables/history/useNoteHistory'
 import { type Note, type TodoItem } from '~/entities/note'
