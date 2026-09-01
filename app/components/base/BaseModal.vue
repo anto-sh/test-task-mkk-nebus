@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
+
 interface Props {
   isOpen: boolean
 }
@@ -9,6 +11,19 @@ const emit = defineEmits(['update:is-open'])
 const close = () => {
   emit('update:is-open', false)
 }
+
+const modalEl = useTemplateRef<HTMLDivElement>('modal-el')
+const focusTrap = useFocusTrap(modalEl)
+
+watch(
+  () => isOpen,
+  async (newVal) => {
+    if (newVal) {
+      await nextTick()
+      focusTrap.activate()
+    } else focusTrap.deactivate()
+  },
+)
 </script>
 
 <template>
@@ -21,7 +36,7 @@ const close = () => {
       aria-modal="true"
       role="dialog"
     >
-      <div class="modal__content">
+      <div class="modal__content" ref="modal-el">
         <header class="modal__header">
           <slot name="header">Default Title</slot>
           <BaseButton class="modal__close-btn" @click="close" size="medium">&times;</BaseButton>
