@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import NoteForm from '~/components/notes/NoteForm.vue'
-import type { Note } from '~/entities/note'
+import { useGlobalUndoRedo } from '~/composables/history/useGlobalUndoRedo'
+import { useNoteHistory } from '~/composables/history/useNoteHistory'
+import { type Note, type TodoItem } from '~/entities/note'
 
 const route = useRoute()
 const notesStore = useNotesStore()
@@ -25,23 +27,48 @@ if (!isNew && !original) {
 const baseNote: Note = original ? structuredClone(toDeepRaw(original)) : createEmptyNote()
 const editingNote = ref<Note>(structuredClone(baseNote))
 
+const history = useNoteHistory(editingNote.value)
+useGlobalUndoRedo(history.undo, history.redo)
+
 // local state manipulation functions
 function addTodoItem(id: string) {
-  editingNote.value.todos.push({ id: crypto.randomUUID(), text: '', done: false })
+  const newTodoItem = { id: crypto.randomUUID(), text: '', done: false }
+  const index = editingNote.value.todos.length
+  editingNote.value.todos.push(newTodoItem)
+
+  history.commit({
+    type: 'todo-add',
+    todo: newTodoItem,
+    index,
+  })
 }
+
 function deleteTodoItem(id: string) {
-  editingNote.value.todos = editingNote.value.todos.filter((t) => t.id !== id)
+  const index = editingNote.value.todos.findIndex((t) => t.id === id)
+  if (index === -1) return
+  const todo = editingNote.value.todos.splice(index, 1)[0] as TodoItem
+  history.commit({ type: 'todo-remove', todo, index })
 }
+
 function toggleTodoItemDone(id: string) {
   const todoItem = editingNote.value.todos.find((t) => t.id === id)
   if (!todoItem) return
+  const before = todoItem.done
   todoItem.done = !todoItem.done
+  history.commit({
+    type: 'todo-done',
+    todoId: id,
+    before,
+    after: !before,
+  })
 }
+
 function updateTodoItemText(id: string, value: string) {
   const todoItem = editingNote.value.todos.find((t) => t.id === id)
   if (!todoItem) return
   todoItem.text = value
 }
+
 function updateNoteTitle(value: string) {
   editingNote.value.title = value
 }
@@ -63,6 +90,7 @@ async function cancelEditor() {
 }
 async function deleteNote() {
   notesStore.deleteNote(noteId)
+  await navigateTo({ path: '/' })
 }
 </script>
 
@@ -70,11 +98,17 @@ async function deleteNote() {
   <div class="note__toolbar">
     <BaseButton @click="cancelEditor">Отменить</BaseButton>
     <div>
+      <span>{{ history.undoStackSize.value }}</span>
+      <BaseButton @click="history.undo" :disabled="!history.canUndo.value">&#8617;</BaseButton>
+      <BaseButton @click="history.redo" :disabled="!history.canRedo.value">&#8618;</BaseButton>
+      <span>{{ history.redoStackSize.value }}</span>
+    </div>
+    <div>
       <BaseButton v-if="!isNew" class="btn-delete" @click="deleteNote">Удалить</BaseButton>
       <BaseButton @click="saveNote">Сохранить</BaseButton>
     </div>
   </div>
-  <NoteForm :note="editingNote" />
+  <NoteForm :note="editingNote" :history />
 </template>
 
 <style scoped lang="scss">

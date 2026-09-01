@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useFieldDebouncedCommitingWatcher } from '~/composables/history/useFieldDebouncedCommitingWatcher'
+import type { useNoteHistory } from '~/composables/history/useNoteHistory'
 import type { TodoItem } from '~/entities/note'
 interface Props {
   item: TodoItem
   isReadonly?: boolean
+  history?: ReturnType<typeof useNoteHistory>
 }
-const { item, isReadonly = false } = defineProps<Props>()
+const { item, isReadonly = false, history = null } = defineProps<Props>()
 
 const toggleTodoItemDone = inject<(id: string) => void>('toggleTodoItemDone', () => {})
 const updateTodoItemText = inject<(id: string, value: string) => void>(
@@ -16,6 +19,21 @@ const deleteTodoItem = inject<(id: string) => void>('deleteTodoItem', () => {})
 function updateText(event: Event) {
   updateTodoItemText(item.id, (event.target as HTMLInputElement).value)
 }
+
+const todoTextFieldDebouncedCommit = isReadonly
+  ? () => {}
+  : useFieldDebouncedCommitingWatcher(
+      () => item.text,
+      (before, after) => {
+        if (history)
+          history.commit({
+            type: 'todo-text',
+            todoId: item.id,
+            before,
+            after,
+          })
+      },
+    )
 </script>
 
 <template>
@@ -32,6 +50,7 @@ function updateText(event: Event) {
       type="text"
       :value="item.text"
       @input="updateText"
+      @blur="todoTextFieldDebouncedCommit"
       placeholder="Задача"
     />
     <span v-else class="todo-item__text">{{ item.text }}</span>
