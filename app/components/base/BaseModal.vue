@@ -29,16 +29,25 @@ watch(
 <template>
   <Teleport to="body">
     <div v-if="isOpen" class="modal__backdrop" @click.self="close" @keydown.esc="close">
-      <div class="modal__content" ref="modal-el" tabindex="-1" aria-modal="true" role="dialog">
+      <div
+        class="modal__content"
+        ref="modal-el"
+        tabindex="-1"
+        aria-modal="true"
+        role="dialog"
+        color="danger"
+      >
         <header class="modal__header">
           <slot name="header">Default Title</slot>
-          <BaseButton class="modal__close-btn" @click="close" size="medium">&times;</BaseButton>
+          <BaseButton class="modal__close-btn" @click="close" size="medium" color="danger">
+            &times;
+          </BaseButton>
         </header>
 
         <div class="modal__body">
           <slot>Default body content</slot>
         </div>
-
+        <UiDivider />
         <footer v-if="$slots.footer" class="modal__footer">
           <slot name="footer" :close></slot>
         </footer>

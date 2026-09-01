@@ -49,7 +49,7 @@ const titleFieldDebouncedCommit = useFieldDebouncedCommitingWatcher(
     font-size: var(--text-2xl);
   }
   &__input {
-    width: 98%;
+    width: 99%;
     margin-top: var(--spacing-sm);
     font-size: var(--text-3xl);
   }

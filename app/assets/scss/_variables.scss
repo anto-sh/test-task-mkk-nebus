@@ -8,10 +8,10 @@ $color-secondary-500: #ffeedf;
 $color-secondary-700: #ffe8d4;
 $color-secondary-900: #ffdabc;
 
-$color-success-50: #bfff8a;
-$color-success-500: #a1ff55;
-$color-success-700: #91ff38;
-$color-success-900: #65fa0f;
+$color-success-50: #dbfad7;
+$color-success-500: #bdfad4;
+$color-success-700: #9cf8a8;
+$color-success-900: #8beec0;
 
 $color-danger-50: #ffd0d0;
 $color-danger-500: #ff9494;
@@ -32,6 +32,7 @@ $color-surface-900: #2a2727;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
 
   --text-2xs: 0.625rem;
   --text-xs: 0.75rem;
@@ -49,9 +50,10 @@ $color-surface-900: #2a2727;
   /* ──────────────────── base page styles ─────────────────── */
   --page-bg-color: #{$color-surface-50};
   --text-main-color: #{$color-surface-900};
+  --border-color: #{$color-surface-700}
 
   /* ──────────────────────── buttons ──────────────────────── */
-  --btn-border-color: #{$color-surface-500};
+    --btn-border-color: #{$color-surface-500};
 
   // primary
   --btn-primary-bg-color: #{$color-primary-700};

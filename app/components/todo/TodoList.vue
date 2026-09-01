@@ -29,6 +29,7 @@ const itemsToShow = computed(() => items.slice(0, limit ?? items.length))
 <style scoped lang="scss">
 .todo-list {
   list-style: none;
+  padding-left: 0;
 }
 .todo-list--readonly {
   list-style: circle;

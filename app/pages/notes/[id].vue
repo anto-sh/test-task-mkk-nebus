@@ -178,21 +178,19 @@ async function deleteNote() {
     Вы уверены?
   </ModalConfirmModal>
 
-  <BaseModal
+  <ModalConfirmModal
     :is-open="isDraftRecoveryConfirmModalOpen"
     @update:is-open="setIsDraftRecoveryConfirmModalOpen"
+    @on-agree="recoverDraft"
   >
     <template #header>У вас есть черновик</template>
     <template #default> Вы хотите восстановить черновик? </template>
-    <template #footer="modalProps">
-      <BaseButton @click="modalProps.close">Нет</BaseButton>
-      <BaseButton @click="recoverDraft">Да</BaseButton>
-    </template>
-  </BaseModal>
+  </ModalConfirmModal>
 
-  <BaseModal
+  <ModalConfirmModal
     :is-open="isDeletedElsewhereModalOpen"
     @update:is-open="setIsDeletedElsewhereModalOpen"
+    @on-agree="navigateTo({ path: '/' })"
   >
     <template #header>Заметка удалена</template>
     <template #default>
@@ -202,11 +200,7 @@ async function deleteNote() {
       <br />
       Хотите перейти на главную?
     </template>
-    <template #footer="modalProps">
-      <BaseButton @click="modalProps.close">Нет</BaseButton>
-      <BaseButton @click="navigateTo({ path: '/' })">Да</BaseButton>
-    </template>
-  </BaseModal>
+  </ModalConfirmModal>
 </template>
 
 <style scoped lang="scss">

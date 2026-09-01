@@ -37,7 +37,10 @@ const todoTextFieldDebouncedCommit = isReadonly
 </script>
 
 <template>
-  <li class="todo-item" :class="{ 'todo-item--done': item.done }">
+  <li
+    class="todo-item"
+    :class="{ 'todo-item--done': item.done, 'todo-item--readonly': isReadonly }"
+  >
     <input
       v-if="!isReadonly"
       type="checkbox"
@@ -53,7 +56,7 @@ const todoTextFieldDebouncedCommit = isReadonly
       @blur="todoTextFieldDebouncedCommit"
       placeholder="Задача"
     />
-    <span v-else class="todo-item__text">{{ item.text }}</span>
+    <span v-else class="todo-item__text">{{ item.text.slice(0, 100) }}...</span>
     <BaseButton v-if="!isReadonly" @click="deleteTodoItem(item.id)" color="danger"
       >&times;</BaseButton
     >
@@ -76,11 +79,14 @@ const todoTextFieldDebouncedCommit = isReadonly
   }
 
   &--done {
-    display: flex;
-
+    list-style-type: disc;
     #{$base}__text {
       text-decoration: line-through;
     }
+  }
+
+  &--readonly {
+    display: list-item;
   }
 }
 </style>
