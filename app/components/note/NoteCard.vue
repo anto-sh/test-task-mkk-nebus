@@ -13,7 +13,17 @@ function goToNotePage() {
   emit('go-to-note-page', note.id)
 }
 
-const { deleteNote } = useNotesStore()
+const notesStore = useNotesStore()
+
+// modals
+const isDeleteConfirmModalOpen = ref(false)
+function setIsDeleteConfirmModalOpen(value: boolean) {
+  isDeleteConfirmModalOpen.value = value
+}
+
+async function deleteNote() {
+  notesStore.deleteNote(note.id)
+}
 </script>
 
 <template>
@@ -22,8 +32,18 @@ const { deleteNote } = useNotesStore()
   <TodoList :items="note.todos" :is-readonly="true" :limit="3" />
   <div>
     <BaseButton @click="goToNotePage">Редактировать</BaseButton>
-    <BaseButton @click="deleteNote(note.id)">Удалить</BaseButton>
+    <BaseButton @click="setIsDeleteConfirmModalOpen(true)">Удалить</BaseButton>
   </div>
+
+  <ModalConfirmModal
+    :is-open="isDeleteConfirmModalOpen"
+    @update:is-open="setIsDeleteConfirmModalOpen"
+    @on-agree="deleteNote"
+  >
+    Заметка будет удалена.
+    <br />
+    Вы уверены?
+  </ModalConfirmModal>
 </template>
 
 <style scoped lang="scss"></style>

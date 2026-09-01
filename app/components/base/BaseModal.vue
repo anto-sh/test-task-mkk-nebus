@@ -32,7 +32,7 @@ const close = () => {
         </div>
 
         <footer v-if="$slots.footer" class="modal__footer">
-          <slot name="footer" :onClose="close"></slot>
+          <slot name="footer" :close></slot>
         </footer>
       </div>
     </div>

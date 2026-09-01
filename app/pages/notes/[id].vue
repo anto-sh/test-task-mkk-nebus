@@ -3,6 +3,7 @@ import { provide, ref } from 'vue'
 import { useGlobalUndoRedo } from '~/composables/history/useGlobalUndoRedo'
 import { useNoteHistory } from '~/composables/history/useNoteHistory'
 import { type Note, type TodoItem } from '~/entities/note'
+import { clearDraft, loadDraft, saveDraft } from '~/services/draft-storage.repository'
 
 const route = useRoute()
 const notesStore = useNotesStore()
@@ -12,7 +13,7 @@ const isNew = noteId === 'new'
 
 function createEmptyNote(): Note {
   return {
-    id: crypto.randomUUID(),
+    id: 'new',
     title: '',
     todos: [],
   }
@@ -28,6 +29,37 @@ const editingNote = ref<Note>(structuredClone(baseNote))
 
 const history = useNoteHistory(editingNote.value)
 useGlobalUndoRedo(history.undo, history.redo)
+
+// modals
+const isDeleteConfirmModalOpen = ref(false)
+function setIsDeleteConfirmModalOpen(value: boolean) {
+  isDeleteConfirmModalOpen.value = value
+}
+
+const isDraftRecoveryConfirmModalOpen = ref(false)
+function setIsDraftRecoveryConfirmModalOpen(value: boolean) {
+  isDraftRecoveryConfirmModalOpen.value = value
+}
+
+// draft recovery
+const draft = loadDraft(noteId)
+console.log(draft)
+onMounted(() => {
+  if (draft) setIsDraftRecoveryConfirmModalOpen(true)
+})
+onUnmounted(() => clearDraft(noteId))
+
+function recoverDraft() {
+  if (!draft) return
+  editingNote.value = draft
+  setIsDraftRecoveryConfirmModalOpen(false)
+}
+
+watch(
+  editingNote,
+  debounce(() => saveDraft(editingNote.value.id, editingNote.value), 1000),
+  { deep: true },
+)
 
 // local state manipulation functions
 function addTodoItem(id: string) {
@@ -81,6 +113,7 @@ provide('updateNoteTitle', updateNoteTitle)
 // global state manipulations functions
 async function saveNote() {
   if (editingNote.value.title.trim() == '') editingNote.value.title = 'Без названия'
+  if (editingNote.value.id === 'new') editingNote.value.id = crypto.randomUUID()
   notesStore.saveNote(editingNote.value)
   await navigateTo({ path: '/' })
 }
@@ -103,11 +136,35 @@ async function deleteNote() {
       <span>{{ history.redoStackSize.value }}</span>
     </div>
     <div>
-      <BaseButton v-if="!isNew" class="btn-delete" @click="deleteNote">Удалить</BaseButton>
+      <BaseButton v-if="!isNew" class="btn-delete" @click="setIsDeleteConfirmModalOpen(true)"
+        >Удалить</BaseButton
+      >
       <BaseButton @click="saveNote">Сохранить</BaseButton>
     </div>
   </div>
   <NoteForm :note="editingNote" :history />
+
+  <ModalConfirmModal
+    :is-open="isDeleteConfirmModalOpen"
+    @update:is-open="setIsDeleteConfirmModalOpen"
+    @on-agree="deleteNote"
+  >
+    Заметка будет удалена.
+    <br />
+    Вы уверены?
+  </ModalConfirmModal>
+
+  <BaseModal
+    :is-open="isDraftRecoveryConfirmModalOpen"
+    @update:is-open="setIsDraftRecoveryConfirmModalOpen"
+  >
+    <template #header>У вас есть черновик</template>
+    <template #default> Вы хотите восстановить черновик? </template>
+    <template #footer="modalProps">
+      <BaseButton @click="modalProps.close">Нет</BaseButton>
+      <BaseButton @click="recoverDraft">Да</BaseButton>
+    </template>
+  </BaseModal>
 </template>
 
 <style scoped lang="scss">
