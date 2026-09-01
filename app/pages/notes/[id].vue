@@ -42,24 +42,29 @@ function setIsDraftRecoveryConfirmModalOpen(value: boolean) {
 }
 
 // draft recovery
+
+const [debouncedDraftSave, draftSaveTimer] = debounce(
+  () => saveDraft(editingNote.value.id, editingNote.value),
+  1000,
+)
+
+watch(editingNote, debouncedDraftSave, { deep: true })
+
 const draft = loadDraft(noteId)
 console.log(draft)
 onMounted(() => {
   if (draft) setIsDraftRecoveryConfirmModalOpen(true)
 })
-onUnmounted(() => clearDraft(noteId))
+onUnmounted(() => {
+  clearTimeout(draftSaveTimer)
+  clearDraft(noteId)
+})
 
 function recoverDraft() {
   if (!draft) return
   editingNote.value = draft
   setIsDraftRecoveryConfirmModalOpen(false)
 }
-
-watch(
-  editingNote,
-  debounce(() => saveDraft(editingNote.value.id, editingNote.value), 1000),
-  { deep: true },
-)
 
 // local state manipulation functions
 function addTodoItem(id: string) {
