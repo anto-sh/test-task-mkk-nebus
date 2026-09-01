@@ -28,10 +28,9 @@ const titleFieldDebouncedCommit = useFieldDebouncedCommitingWatcher(
 </script>
 <template>
   <form @submit.prevent>
-    <label for="title">Название заметки: </label>
-    <br />
+    <label class="note-title__label" for="title">Название заметки</label>
     <input
-      class="note-title-input"
+      class="note-title__input"
       type="text"
       :value="note.title"
       @input="updateTitle"
@@ -45,7 +44,14 @@ const titleFieldDebouncedCommit = useFieldDebouncedCommitingWatcher(
   </form>
 </template>
 <style scoped lang="scss">
-.note-title-input {
-  width: 98%;
+.note-title {
+  &__label {
+    font-size: var(--text-2xl);
+  }
+  &__input {
+    width: 98%;
+    margin-top: var(--spacing-sm);
+    font-size: var(--text-3xl);
+  }
 }
 </style>

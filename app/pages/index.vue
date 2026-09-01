@@ -14,6 +14,7 @@ async function goToNotePage(id?: number) {
 }
 </script>
 <template>
+  <h1>Тестовое задание МКК Небус. Трекер задач.</h1>
   <div class="toolbar">
     <BaseButton @click="goToNotePage()">Создать новую заметку</BaseButton>
   </div>

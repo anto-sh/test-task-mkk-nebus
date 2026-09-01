@@ -54,7 +54,9 @@ const todoTextFieldDebouncedCommit = isReadonly
       placeholder="Задача"
     />
     <span v-else class="todo-item__text">{{ item.text }}</span>
-    <BaseButton v-if="!isReadonly" @click="deleteTodoItem(item.id)">&times;</BaseButton>
+    <BaseButton v-if="!isReadonly" @click="deleteTodoItem(item.id)" color="danger"
+      >&times;</BaseButton
+    >
   </li>
 </template>
 
@@ -62,11 +64,15 @@ const todoTextFieldDebouncedCommit = isReadonly
 .todo-item {
   $base: &;
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
 
   &__text {
     width: 100%;
+    font-size: var(--text-md);
+    background-color: var(--page-bg-color);
+    border: none;
+    color: var(--text-main-color);
   }
 
   &--done {

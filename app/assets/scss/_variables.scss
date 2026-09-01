@@ -1,10 +1,27 @@
-$color-primary-50: #5eb2f3;
-$color-primary-500: #62c4eb;
-$color-primary-900: #35dde9;
+$color-primary-50: #dce2fc;
+$color-primary-500: #a1b2fc;
+$color-primary-700: #8097ff;
+$color-primary-900: #5f7cff;
 
-$color-surface-50: #faf3e5;
-$color-surface-500: #a1a1a1;
-$color-surface-900: #2e2f31;
+$color-secondary-50: #fff1e5;
+$color-secondary-500: #ffeedf;
+$color-secondary-700: #ffe8d4;
+$color-secondary-900: #ffdabc;
+
+$color-success-50: #bfff8a;
+$color-success-500: #a1ff55;
+$color-success-700: #91ff38;
+$color-success-900: #65fa0f;
+
+$color-danger-50: #ffd0d0;
+$color-danger-500: #ff9494;
+$color-danger-700: #fa7070;
+$color-danger-900: #ff4949;
+
+$color-surface-50: #f5f5f2;
+$color-surface-500: #8f8b8b;
+$color-surface-700: #5c5858;
+$color-surface-900: #2a2727;
 
 :root {
   --spacing-2xs: 0.125rem;
@@ -29,17 +46,41 @@ $color-surface-900: #2e2f31;
   --text-6xl: 3.75rem;
   --text-7xl: 4.5rem;
 
-  // base page styles
+  /* ──────────────────── base page styles ─────────────────── */
   --page-bg-color: #{$color-surface-50};
   --text-main-color: #{$color-surface-900};
 
-  // buttons
+  /* ──────────────────────── buttons ──────────────────────── */
   --btn-border-color: #{$color-surface-500};
+
+  // primary
+  --btn-primary-bg-color: #{$color-primary-700};
+  --btn-primary-hover-bg-color: #{$color-primary-900};
+  --btn-primary-click-bg-color: #{$color-primary-500};
+  --btn-primary-text-color: #{$color-surface-50};
+
+  // secondary
+  --btn-secondary-bg-color: #{$color-secondary-700};
+  --btn-secondary-hover-bg-color: #{$color-secondary-900};
+  --btn-secondary-click-bg-color: #{$color-secondary-500};
+  --btn-secondary-text-color: #{$color-surface-700};
+
+  // success
+  --btn-success-bg-color: #{$color-success-700};
+  --btn-success-hover-bg-color: #{$color-success-900};
+  --btn-success-click-bg-color: #{$color-success-500};
+  --btn-success-text-color: #{$color-surface-700};
+
+  // danger
+  --btn-danger-bg-color: #{$color-danger-700};
+  --btn-danger-hover-bg-color: #{$color-danger-900};
+  --btn-danger-click-bg-color: #{$color-danger-500};
+  --btn-danger-text-color: #{$color-surface-50};
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page-bg-color: #{$color-surface-900};
-    --text-main-color: #{$color-surface-50};
-  }
-}
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --page-bg-color: #{$color-surface-900};
+//     --text-main-color: #{$color-surface-50};
+//   }
+// }

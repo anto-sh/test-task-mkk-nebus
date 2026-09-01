@@ -145,17 +145,27 @@ async function deleteNote() {
     <BaseButton @click="cancelEditor">Отменить</BaseButton>
     <div>
       <span>{{ history.undoStackSize.value }}</span>
-      <BaseButton @click="history.undo" :disabled="!history.canUndo.value">&#8617;</BaseButton>
-      <BaseButton @click="history.redo" :disabled="!history.canRedo.value">&#8618;</BaseButton>
+      <BaseButton class="btn-undo" @click="history.undo" :disabled="!history.canUndo.value"
+        >&#8617;</BaseButton
+      >
+      <BaseButton class="btn-redo" @click="history.redo" :disabled="!history.canRedo.value"
+        >&#8618;</BaseButton
+      >
       <span>{{ history.redoStackSize.value }}</span>
     </div>
     <div>
-      <BaseButton v-if="!isNew" class="btn-delete" @click="setIsDeleteConfirmModalOpen(true)"
-        >Удалить</BaseButton
+      <BaseButton
+        v-if="!isNew"
+        class="btn-delete"
+        @click="setIsDeleteConfirmModalOpen(true)"
+        color="danger"
       >
-      <BaseButton @click="saveNote">Сохранить</BaseButton>
+        Удалить
+      </BaseButton>
+      <BaseButton @click="saveNote" color="success"> Сохранить </BaseButton>
     </div>
   </div>
+
   <NoteForm :note="editingNote" :history />
 
   <ModalConfirmModal
@@ -204,6 +214,10 @@ async function deleteNote() {
   display: flex;
   justify-content: space-between;
   margin-bottom: 3rem;
+  .btn-undo,
+  .btn-redo {
+    margin: 0 var(--spacing-sm);
+  }
   .btn-delete {
     margin-right: var(--spacing-sm);
   }

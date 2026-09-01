@@ -21,5 +21,5 @@ export function toDeepRaw<T>(data: T): T {
     rawData[key] = toDeepRaw<typeof value>(value)
   }
 
-  return rawData // much better: structuredClone(rawData)
+  return rawData
 }
