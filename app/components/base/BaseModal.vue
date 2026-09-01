@@ -28,15 +28,8 @@ watch(
 
 <template>
   <Teleport to="body">
-    <div
-      v-if="isOpen"
-      class="modal__backdrop"
-      @click.self="close"
-      @keydown.esc="close"
-      aria-modal="true"
-      role="dialog"
-    >
-      <div class="modal__content" ref="modal-el">
+    <div v-if="isOpen" class="modal__backdrop" @click.self="close" @keydown.esc="close">
+      <div class="modal__content" ref="modal-el" tabindex="-1" aria-modal="true" role="dialog">
         <header class="modal__header">
           <slot name="header">Default Title</slot>
           <BaseButton class="modal__close-btn" @click="close" size="medium">&times;</BaseButton>

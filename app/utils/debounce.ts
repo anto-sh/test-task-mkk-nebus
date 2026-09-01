@@ -1,7 +1,7 @@
 export function debounce<T extends any[], R>(
   func: (this: any, ...args: T) => R,
   delay: number,
-): [(this: any, ...args: T) => void, ReturnType<typeof setTimeout> | undefined] {
+): [(this: any, ...args: T) => void, () => ReturnType<typeof setTimeout> | undefined] {
   let timeoutId: ReturnType<typeof setTimeout> | undefined
 
   return [
@@ -14,6 +14,8 @@ export function debounce<T extends any[], R>(
         func.apply(context, args)
       }, delay)
     },
-    timeoutId,
+    function () {
+      return timeoutId
+    },
   ]
 }

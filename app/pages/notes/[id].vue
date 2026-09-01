@@ -30,7 +30,7 @@ const editingNote = ref<Note>(structuredClone(baseNote))
 const history = useNoteHistory(editingNote.value)
 useGlobalUndoRedo(history.undo, history.redo)
 
-// modals
+/* ─────────────────────────  modals ──────────────────────── */
 const isDeleteConfirmModalOpen = ref(false)
 function setIsDeleteConfirmModalOpen(value: boolean) {
   isDeleteConfirmModalOpen.value = value
@@ -41,9 +41,19 @@ function setIsDraftRecoveryConfirmModalOpen(value: boolean) {
   isDraftRecoveryConfirmModalOpen.value = value
 }
 
-// draft recovery
+const isDeletedElsewhereModalOpen = ref(false)
+function setIsDeletedElsewhereModalOpen(value: boolean) {
+  isDeletedElsewhereModalOpen.value = value
+}
+watch(
+  () => notesStore.getNoteById(noteId),
+  (found) => {
+    if (!found && noteId !== 'new') isDeletedElsewhereModalOpen.value = true
+  },
+)
 
-const [debouncedDraftSave, draftSaveTimer] = debounce(
+/* ───────────────────── draft recovery ──────────────────── */
+const [debouncedDraftSave, getDraftSaveTimer] = debounce(
   () => saveDraft(editingNote.value.id, editingNote.value),
   1000,
 )
@@ -51,12 +61,11 @@ const [debouncedDraftSave, draftSaveTimer] = debounce(
 watch(editingNote, debouncedDraftSave, { deep: true })
 
 const draft = loadDraft(noteId)
-console.log(draft)
 onMounted(() => {
   if (draft) setIsDraftRecoveryConfirmModalOpen(true)
 })
-onUnmounted(() => {
-  clearTimeout(draftSaveTimer)
+onBeforeUnmount(() => {
+  clearTimeout(getDraftSaveTimer())
   clearDraft(noteId)
 })
 
@@ -66,7 +75,7 @@ function recoverDraft() {
   setIsDraftRecoveryConfirmModalOpen(false)
 }
 
-// local state manipulation functions
+/* ───────────  local state manipulation functions ────────── */
 function addTodoItem(id: string) {
   const newTodoItem = { id: crypto.randomUUID(), text: '', done: false }
   const index = editingNote.value.todos.length
@@ -115,7 +124,7 @@ provide('toggleTodoItemDone', toggleTodoItemDone)
 provide('updateTodoItemText', updateTodoItemText)
 provide('updateNoteTitle', updateNoteTitle)
 
-// global state manipulations functions
+/* ────────── global state manipulations functions ───────── */
 async function saveNote() {
   if (editingNote.value.title.trim() == '') editingNote.value.title = 'Без названия'
   notesStore.saveNote(editingNote.value)
@@ -167,6 +176,22 @@ async function deleteNote() {
     <template #footer="modalProps">
       <BaseButton @click="modalProps.close">Нет</BaseButton>
       <BaseButton @click="recoverDraft">Да</BaseButton>
+    </template>
+  </BaseModal>
+
+  <BaseModal
+    :is-open="isDeletedElsewhereModalOpen"
+    @update:is-open="setIsDeletedElsewhereModalOpen"
+  >
+    <template #header>Заметка удалена</template>
+    <template #default>
+      Заметка была удалена из другой вкладки.
+      <br />
+      Хотите перейти на главную?
+    </template>
+    <template #footer="modalProps">
+      <BaseButton @click="modalProps.close">Нет</BaseButton>
+      <BaseButton @click="navigateTo({ path: '/' })">Да</BaseButton>
     </template>
   </BaseModal>
 </template>
