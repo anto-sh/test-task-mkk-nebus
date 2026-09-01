@@ -21,5 +21,5 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxt/eslint', '@pinia/nuxt'],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxt/test-utils/module'],
 })
