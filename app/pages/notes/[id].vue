@@ -54,6 +54,7 @@ provide('updateNoteTitle', updateNoteTitle)
 
 // global state manipulations functions
 async function saveNote() {
+  if (editingNote.value.title.trim() == '') editingNote.value.title = 'Без названия'
   notesStore.saveNote(editingNote.value)
   await navigateTo({ path: '/' })
 }
