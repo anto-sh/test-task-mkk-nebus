@@ -20,8 +20,12 @@ export const useNotesStore = defineStore('notes', () => {
   }
 
   function saveNote(note: Note) {
+    if (note.id === 'new') {
+      notes.value.push({ ...note, id: crypto.randomUUID() })
+      return
+    }
     const index = notes.value.findIndex((n) => n.id === note.id)
-    if (index === -1) notes.value.push({ ...note })
+    if (index === -1) return
     notes.value[index] = { ...note }
   }
 

@@ -113,7 +113,6 @@ provide('updateNoteTitle', updateNoteTitle)
 // global state manipulations functions
 async function saveNote() {
   if (editingNote.value.title.trim() == '') editingNote.value.title = 'Без названия'
-  if (editingNote.value.id === 'new') editingNote.value.id = crypto.randomUUID()
   notesStore.saveNote(editingNote.value)
   await navigateTo({ path: '/' })
 }
