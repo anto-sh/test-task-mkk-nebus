@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  nuxt-app:
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app # монтируем исходники для hot reload
+      - /app/node_modules # анонимный volume, чтобы не перекрывались модули с хоста
+      - /app/.nuxt # то же для сгенерированных Nuxt файлов
+    environment:
+      - NODE_ENV=development
