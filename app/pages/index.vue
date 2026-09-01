@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NoteCard from '~/components/notes/NoteCard.vue'
+import NoteCard from '~/components/note/NoteCard.vue'
 
 const notesStore = useNotesStore()
 async function goToNotePage(id?: number) {
